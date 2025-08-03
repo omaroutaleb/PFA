@@ -1,4 +1,8 @@
-package com.example.pfa.controller.repository;
+package com.example.pfa.repository;
 
-public class DocumentRepository {
+import com.example.pfa.model.Document;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DocumentRepository extends JpaRepository<Document, Long> {
+
 }

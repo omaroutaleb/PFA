@@ -1,4 +1,4 @@
-package com.example.pfa.controller.service;
+package com.example.pfa.service;
 
 public class DocumentService {
 }

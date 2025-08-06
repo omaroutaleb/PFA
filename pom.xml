@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>PFA</artifactId>
+    <artifactId>SmartDoc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>PFA</name>
     <description>PFA</description>

@@ -19,7 +19,7 @@ public class DocumentService {
     }
 
     @Transactional
-    public Document save(DocumentDTO entity) {
+    public Document save(Document entity) {
         Document doc = new Document();
         doc.setDocType(entity.getDocType());
         doc.setCreatedAt(LocalDateTime.now());

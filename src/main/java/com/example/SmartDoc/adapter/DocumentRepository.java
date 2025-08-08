@@ -1,5 +1,6 @@
 package com.example.SmartDoc.adapter;
 
+import com.example.SmartDoc.application.DTO.DocumentDTO;
 import com.example.SmartDoc.model.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

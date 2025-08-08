@@ -6,5 +6,5 @@ import java.util.List;
 public class AIExtractionResult {
 
     private String docType;
-    private List<DocumentFiledDTO> fields = new ArrayList<>();
+    private List<DocumentFiledDTO> fields ;
 }

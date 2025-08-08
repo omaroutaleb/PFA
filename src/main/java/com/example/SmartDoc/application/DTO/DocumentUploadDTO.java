@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class DocumentUploadDTO {
 
-    private List<DocumentFiledDTO> fields = new ArrayList<>();
+    private List<DocumentFiledDTO> fields ;
 }

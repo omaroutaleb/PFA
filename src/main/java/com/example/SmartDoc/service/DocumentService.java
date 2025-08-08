@@ -2,10 +2,12 @@ package com.example.SmartDoc.service;
 
 import com.example.SmartDoc.adapter.DocumentRepository;
 import com.example.SmartDoc.application.DTO.DocumentDTO;
+import com.example.SmartDoc.application.DTO.DocumentFiledDTO;
 import com.example.SmartDoc.model.Document;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,14 +24,14 @@ public class DocumentService {
 
 
 
-//    public Document updateFields(@RequestBody UUID id, DocumentFiledDTO filedDTO) {
-//        Document existing = findById(id);
-//        existing.setFileName(filedDTO);
-//        existing.setDocType(entity.getDocType());
-//        existing.setExtractedDataJson(entity.getExtractedDataJson());
-//        existing.setStatus(entity.getStatus());
-//        return documentRepository.save(existing);
-//    }
+    public Document updateFields(@RequestBody UUID id, Document entity) {
+        Document existing = findById(id);
+        existing.setFileName(entity.getFileName());
+        existing.setDocType(entity.getDocType());
+        existing.setExtractedDataJson(entity.getExtractedDataJson());
+        existing.setStatus(entity.getStatus());
+        return documentRepository.save(existing);
+    }
 
     public Document save(Document entity) {
         return documentRepository.save(entity);

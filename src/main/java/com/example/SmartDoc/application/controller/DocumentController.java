@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 @RestController
 
@@ -19,13 +23,32 @@ public class DocumentController {
 
     private DocumentMapper documentMapper;
 
-    private DocumentRepository documentRepository;
+    private List<DocumentDTO> documentDTOS;
 
     @Autowired
     public void setDocumentService(DocumentService documentService,DocumentMapper documentMapper) {
         this.documentService = documentService;
         this.documentMapper = documentMapper;
     }
+
+    public DocumentDTO get(UUID id) {
+        Document doc = documentService.findById(id);
+        return documentMapper.toDTO(doc);
+    }
+
+    public List<DocumentDTO> getAll() {
+        List<Document> docs = documentService.findAll();
+        for (Document doc : docs) {
+            documentDTOS.add(documentMapper.toDTO(doc));
+        }
+        return documentDTOS;
+    }
+
+    public DocumentDTO update(UUID id, @RequestBody DocumentDTO documentDTO) {
+        Document doc = documentMapper.fromDTO(documentDTO);
+        return documentMapper.toDTO(documentService.updateFields(id,doc));
+    }
+
 
 
 

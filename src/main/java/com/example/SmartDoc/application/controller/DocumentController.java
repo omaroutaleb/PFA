@@ -1,6 +1,7 @@
 package com.example.SmartDoc.application.controller;
 
 import com.example.SmartDoc.adapter.DocumentMapper;
+import com.example.SmartDoc.adapter.DocumentRepository;
 import com.example.SmartDoc.application.DTO.DocumentDTO;
 import com.example.SmartDoc.model.Document;
 import com.example.SmartDoc.service.DocumentService;
@@ -18,16 +19,16 @@ public class DocumentController {
 
     private DocumentMapper documentMapper;
 
+    private DocumentRepository documentRepository;
+
+    @Autowired
     public void setDocumentService(DocumentService documentService,DocumentMapper documentMapper) {
         this.documentService = documentService;
         this.documentMapper = documentMapper;
     }
 
-    @PostMapping("save")
-    public Document save(@RequestBody DocumentDTO documentDTO) {
-        Document doc = documentMapper.fromDTO(documentDTO);
-        return documentService.save(doc);
-    }
+
+
 
 
 

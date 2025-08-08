@@ -5,9 +5,11 @@ import com.example.SmartDoc.application.DTO.DocumentDTO;
 import com.example.SmartDoc.model.Document;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class DocumentService {
@@ -18,24 +20,26 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
-    @Transactional
+
+
+//    public Document updateFields(@RequestBody UUID id, DocumentFiledDTO filedDTO) {
+//        Document existing = findById(id);
+//        existing.setFileName(filedDTO);
+//        existing.setDocType(entity.getDocType());
+//        existing.setExtractedDataJson(entity.getExtractedDataJson());
+//        existing.setStatus(entity.getStatus());
+//        return documentRepository.save(existing);
+//    }
+
     public Document save(Document entity) {
-        Document doc = new Document();
-        doc.setDocType(entity.getDocType());
-        doc.setCreatedAt(LocalDateTime.now());
-        doc.setExtractedDataJson(entity.getExtractedDataJson());
-        doc.setFileName(entity.getFileName());
-        return documentRepository.save(doc);
+        return documentRepository.save(entity);
     }
 
     public List<Document> findAll() {
         return documentRepository.findAll();
     }
 
-    public Document getByid(String id) {
-        return documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found: " + id));
+    public Document findById(UUID id) {
+        return documentRepository.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("Document not found: " + id));
     }
-
-
-
 }

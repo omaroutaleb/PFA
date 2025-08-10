@@ -1,5 +1,6 @@
 package com.example.SmartDoc.application.controller;
 
+import com.example.SmartDoc.adapter.StorageException;
 import com.example.SmartDoc.service.FileStorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,8 @@ public class UploadController {
     }
 
     @PostMapping("/upload")
-    public MultipartFile fileStorageService(MultipartFile file) {
-
-        return fileStorageService(file);
+    public void fileStorage(MultipartFile file) throws StorageException {
+        fileStorageService.store(file);
     }
 
 }

@@ -42,6 +42,6 @@ public class DocumentService {
     }
 
     public Document findById(UUID id) {
-        return documentRepository.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("Document not found: " + id));
+        return documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found: " + id));
     }
 }

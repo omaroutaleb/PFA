@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@RequestMapping("/documents")
 @RestController
 public class UploadController {
 
@@ -16,7 +17,7 @@ public class UploadController {
         this.fileStorageService = fileStorageService;
     }
 
-    @PostMapping("/upload,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}")
+    @PostMapping("/upload")
     public void fileStorage(MultipartFile file) throws StorageException {
 
         fileStorageService.store(file);

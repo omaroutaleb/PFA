@@ -5,10 +5,9 @@ import com.example.SmartDoc.adapter.DocumentRepository;
 import com.example.SmartDoc.application.DTO.DocumentDTO;
 import com.example.SmartDoc.model.Document;
 import com.example.SmartDoc.service.DocumentService;
+import jakarta.persistence.PostUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +30,14 @@ public class DocumentController {
         this.documentMapper = documentMapper;
     }
 
-    public DocumentDTO get(UUID id) {
+
+    @GetMapping("/documents/{id}")
+    public DocumentDTO get(@PathVariable UUID id) {
         Document doc = documentService.findById(id);
         return documentMapper.toDTO(doc);
     }
 
+    @GetMapping("/documents")
     public List<DocumentDTO> getAll() {
         List<Document> docs = documentService.findAll();
         for (Document doc : docs) {
@@ -44,7 +46,8 @@ public class DocumentController {
         return documentDTOS;
     }
 
-    public DocumentDTO update(UUID id, @RequestBody DocumentDTO documentDTO) {
+    @PutMapping("/documents/{id}")
+    public DocumentDTO update(@PathVariable UUID id, @RequestBody DocumentDTO documentDTO) {
         Document doc = documentMapper.fromDTO(documentDTO);
         return documentMapper.toDTO(documentService.updateFields(id,doc));
     }

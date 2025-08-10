@@ -8,4 +8,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class UploadController {
 
+    private FileStorageService fileStorageService;
+
+    public UploadController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
+
+    @PostMapping("/upload")
+    public MultipartFile fileStorageService(MultipartFile file) {
+
+        return fileStorageService(file);
+    }
+
 }

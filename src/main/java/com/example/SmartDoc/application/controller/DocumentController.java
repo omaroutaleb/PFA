@@ -52,6 +52,4 @@ public class DocumentController {
         return documentMapper.toDTO(documentService.updateFields(id,doc));
     }
 
-
-
 }

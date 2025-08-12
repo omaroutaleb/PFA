@@ -5,25 +5,13 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.content.Media;
-import org.springframework.core.io.Resource;
-import org.springframework.util.MimeType;
+import java.util.List;
 
-import java.util.List;
-import java.util.List;
 
 @Service
 public class AIService {
@@ -36,15 +24,17 @@ public class AIService {
 
 
 
-    public ChatResponse extractFieldsFromPdf(Resource pdfFile) {
+    public ChatResponse extractFields(Resource file) {
+        MimeType type = detectMimeType(file);
+
         var userMessage = UserMessage.builder()
                 .text("""
-                  Summarize this PDF. 
-                  - What is it about?
-                  - Key fields, dates, amounts
-                  - Any tables or entities worth extracting
+                  You are an IDP assistant.
+                  - If input is a PDF, read all pages.
+                  - If input is an image, do OCR first.
+                  Return a concise JSON with detected doc type and key fields (dates, totals, names, ids, addresses).
                   """)
-                .media(List.of(new Media(new MimeType("application", "pdf"), pdfFile)))
+                .media(List.of(new Media(type, file)))
                 .build();
 
         var response = this.openAiChatModel.call(
@@ -58,22 +48,18 @@ public class AIService {
         return response;
     }
 
+    private MimeType detectMimeType(Resource file) {
+        String name = file.getFilename() == null ? "" : file.getFilename().toLowerCase();
 
-//
-//    public ChatResponse extractFields(Resource file) {
-//
-//
-//        var userMessage = UserMessage.builder()
-//                .text("Explain what do you see on this picture?")
-//                .media(List.of(new org.springframework.ai.content.Media(MimeTypeUtils.IMAGE_PNG, (Resource) file)))
-//                .build();
-//        var response = this.openAiChatModel
-//                .call(new Prompt(List.of(userMessage), OpenAiChatOptions.builder().model("gpt-4o").build()));
-//
-//        System.out.println(response);
-//        return response;
+        if (name.endsWith(".pdf"))   return new MimeType("application", "pdf");
+        if (name.endsWith(".docx")) return new MimeType("application, vnd.openxmlformats-officedocument.wordprocessingml.document");// no MimeTypeUtils constant for PDF
+        if (name.endsWith(".doc"))   return new MimeType("application", "msword");
+        if (name.endsWith(".png"))   return MimeTypeUtils.IMAGE_PNG;
+        if (name.endsWith(".jpg") || name.endsWith(".jpeg")) return MimeTypeUtils.IMAGE_JPEG;
 
-
+        throw new IllegalArgumentException("Unsupported file type: " + name);
     }
+
+}
 
 

@@ -25,7 +25,7 @@ public class UploadController {
     public void fileStorage(MultipartFile file) throws StorageException {
 
         fileStorageService.store(file);
-        aiService.extractFields(file.getResource());
+        aiService.extractFieldsFromPdf(file.getResource());
     }
 
 }

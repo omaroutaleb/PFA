@@ -24,10 +24,10 @@ public class Document {
     private String docType;
     private LocalDateTime createdAt;
     private String status;
-    @Column(length = 2000)
+    @Column(name = "extracted_data_json",columnDefinition = "TEXT")
     private String extractedDataJson;
 
-    public Document(String fileName, String docType, LocalDateTime createdAt, String extractedDataJson, String status) {
+    public Document(String fileName, String docType, LocalDateTime createdAt,String status, String extractedDataJson) {
         this.fileName = fileName;
         this.docType = docType;
         this.createdAt = createdAt;

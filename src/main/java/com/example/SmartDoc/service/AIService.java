@@ -1,5 +1,6 @@
 package com.example.SmartDoc.service;
 
+import com.example.SmartDoc.model.Document;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.ai.content.Media;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -24,7 +28,7 @@ public class AIService {
 
 
 
-    public ChatResponse extractFields(Resource file) {
+    public Document extractFields(Resource file) {
         MimeType type = detectMimeType(file);
 
         var userMessage = UserMessage.builder()
@@ -37,15 +41,18 @@ public class AIService {
                 .media(List.of(new Media(type, file)))
                 .build();
 
-        var response = this.openAiChatModel.call(
+        String response = String.valueOf(this.openAiChatModel.call(
                 new Prompt(List.of(userMessage),
                         OpenAiChatOptions.builder()
                                 .model("gpt-4o")
                                 .build())
-        );
+        ));
 
         System.out.println(response);
-        return response;
+        String filename = file.getFilename();
+        LocalDateTime date = LocalDateTime.now();
+        Document doc = new Document(filename,null,date,"loading",response);
+        return doc;
     }
 
     private MimeType detectMimeType(Resource file) {

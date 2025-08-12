@@ -1,9 +1,6 @@
 package com.example.SmartDoc.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +24,16 @@ public class Document {
     private String docType;
     private LocalDateTime createdAt;
     private String status;
+    @Column(length = 2000)
     private String extractedDataJson;
+
+    public Document(String fileName, String docType, LocalDateTime createdAt, String extractedDataJson, String status) {
+        this.fileName = fileName;
+        this.docType = docType;
+        this.createdAt = createdAt;
+        this.extractedDataJson = extractedDataJson;
+        this.status = status;
+    }
 
     public UUID getId() {
         return id;

@@ -7,6 +7,7 @@ Dockerfile
 docker-compose.yaml
 src/main/resources/application.properties
 upload-dirr
+
 ### STS ###
 .apt_generated
 .classpath

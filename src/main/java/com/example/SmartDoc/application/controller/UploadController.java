@@ -8,6 +8,8 @@ import com.example.SmartDoc.service.FileStorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+@CrossOrigin(origins = "http://localhost:8081/")
 @RequestMapping("/documents")
 @RestController
 public class UploadController {

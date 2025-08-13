@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+@CrossOrigin(origins = "http://localhost:8081/")
 @RestController
 
 public class DocumentController {
@@ -39,13 +39,12 @@ public class DocumentController {
 
 
     @GetMapping("/documents")
-    public void getAll() {
+    public List<DocumentDTO> getAll() {
         List<Document> docs = documentService.findAll();
         for (Document doc : docs) {
             documentDTOS.add(documentMapper.toDTO(doc));
-            System.out.println(docs) ;
         }
-
+        return documentDTOS;
     }
 //    @GetMapping("/documents")
 //    public List<DocumentDTO> getAll() {

@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @CrossOrigin(origins = "http://localhost:8081/")
-@RequestMapping("/documents")
+@RequestMapping("/docs")
 @RestController
 public class UploadController {
 

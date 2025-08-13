@@ -31,14 +31,14 @@ public class DocumentController {
     }
 
 
-    @GetMapping("/documents/{id}")
+    @GetMapping("/docs/{id}")
     public DocumentDTO get(@PathVariable UUID id) {
         Document doc = documentService.findById(id);
         return documentMapper.toDTO(doc);
     }
 
 
-    @GetMapping("/documents")
+    @GetMapping("/docs")
     public List<DocumentDTO> getAll() {
         List<Document> docs = documentService.findAll();
         for (Document doc : docs) {
@@ -58,7 +58,7 @@ public class DocumentController {
 
 
 
-    @PutMapping("/documents/{id}")
+    @PutMapping("/docs/{id}")
     public DocumentDTO update(@PathVariable UUID id, @RequestBody DocumentDTO documentDTO) {
         Document doc = documentMapper.fromDTO(documentDTO);
         return documentMapper.toDTO(documentService.updateFields(id,doc));

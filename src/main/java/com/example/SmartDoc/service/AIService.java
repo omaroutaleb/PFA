@@ -4,18 +4,16 @@ import com.example.SmartDoc.model.Document;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.content.Media;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
-import org.springframework.ai.content.Media;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Service
 public class AIService {
@@ -26,40 +24,54 @@ public class AIService {
         this.openAiChatModel = openAiChatModel;
     }
 
-
-
     public Document extractFields(Resource file) {
         MimeType type = detectMimeType(file);
 
-        var userMessage = UserMessage.builder()
+        UserMessage userMessage = UserMessage.builder()
                 .text("""
                   You are an IDP assistant.
                   - If input is a PDF, read all pages.
                   - If input is an image, do OCR first.
-                  Return a concise JSON with detected doc type and key fields (dates, totals, names, ids, addresses).
+                  Return ONLY a concise JSON with detected doc type and key fields (dates, totals, names, ids, addresses).
                   """)
                 .media(List.of(new Media(type, file)))
                 .build();
 
-        String response = String.valueOf(this.openAiChatModel.call(
-                new Prompt(List.of(userMessage),
-                        OpenAiChatOptions.builder()
-                                .model("gpt-4o")
-                                .build())
-        ));
+        OpenAiChatOptions options = OpenAiChatOptions.builder()
+                .model("gpt-4o")
+                .build();
+        ChatResponse resp = this.openAiChatModel.call(new Prompt(List.of(userMessage), options));
 
-        System.out.println(response);
+
+        String json;
+        json = resp.getResult().getOutput().getText();
+        json = stripCodeFences(json);
+
+//        String docType = null;
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            JsonNode node = mapper.readTree(json);
+//            if (node.path("doc_type").isTextual()) {
+//                docType = node.get("doc_type").asText();
+//            }
+//            json = mapper.writeValueAsString(node);
+//        } catch (Exception ignored) {
+//        }
+
+           System.out.println(json);
+
         String filename = file.getFilename();
         LocalDateTime date = LocalDateTime.now();
-        Document doc = new Document(filename,null,date,"loading",response);
-        return doc;
+        String doctype = docTypeFrom(json);
+        System.out.println("doctype: " + doctype);
+        return new Document(filename, doctype, date, "extracted", json);
     }
 
     private MimeType detectMimeType(Resource file) {
         String name = file.getFilename() == null ? "" : file.getFilename().toLowerCase();
 
         if (name.endsWith(".pdf"))   return new MimeType("application", "pdf");
-        if (name.endsWith(".docx")) return new MimeType("application, vnd.openxmlformats-officedocument.wordprocessingml.document");// no MimeTypeUtils constant for PDF
+        if (name.endsWith(".docx"))  return new MimeType("application", "vnd.openxmlformats-officedocument.wordprocessingml.document");
         if (name.endsWith(".doc"))   return new MimeType("application", "msword");
         if (name.endsWith(".png"))   return MimeTypeUtils.IMAGE_PNG;
         if (name.endsWith(".jpg") || name.endsWith(".jpeg")) return MimeTypeUtils.IMAGE_JPEG;
@@ -67,6 +79,21 @@ public class AIService {
         throw new IllegalArgumentException("Unsupported file type: " + name);
     }
 
+    private static String docTypeFrom(String json) {
+        try {
+            com.fasterxml.jackson.databind.ObjectMapper om = new com.fasterxml.jackson.databind.ObjectMapper();
+            com.fasterxml.jackson.databind.JsonNode r = om.readTree(json);
+            com.fasterxml.jackson.databind.JsonNode n = r.at("/doc_type");
+            if (!n.isTextual()) n = r.at("/key_fields/doc_type");
+            return n.isTextual() ? n.asText() : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    private static String stripCodeFences(String s) {
+        if (s == null) return null;
+        return s.replaceAll("(?s)```json\\s*|```", "").trim();
+    }
 }
-
-

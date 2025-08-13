@@ -22,7 +22,7 @@ public class DocumentController {
 
     private DocumentMapper documentMapper;
 
-    private List<DocumentDTO> documentDTOS;
+    private List<DocumentDTO> documentDTOS = new ArrayList<>() ;
 
     @Autowired
     public void setDocumentService(DocumentService documentService,DocumentMapper documentMapper) {
@@ -37,14 +37,27 @@ public class DocumentController {
         return documentMapper.toDTO(doc);
     }
 
+
     @GetMapping("/documents")
-    public List<DocumentDTO> getAll() {
+    public void getAll() {
         List<Document> docs = documentService.findAll();
         for (Document doc : docs) {
             documentDTOS.add(documentMapper.toDTO(doc));
+            System.out.println(docs) ;
         }
-        return documentDTOS;
+
     }
+//    @GetMapping("/documents")
+//    public List<DocumentDTO> getAll() {
+//        List<Document> docs = documentService.findAll();
+//        for (Document doc : docs) {
+//            documentDTOS.add(documentMapper.toDTO(doc));
+//        }
+//        return documentDTOS;
+//    }
+
+
+
 
     @PutMapping("/documents/{id}")
     public DocumentDTO update(@PathVariable UUID id, @RequestBody DocumentDTO documentDTO) {

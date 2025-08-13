@@ -1,15 +1,9 @@
 package com.example.SmartDoc.service;
 
 import com.example.SmartDoc.adapter.DocumentRepository;
-import com.example.SmartDoc.application.DTO.DocumentDTO;
-import com.example.SmartDoc.application.DTO.DocumentFiledDTO;
 import com.example.SmartDoc.model.Document;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +29,7 @@ public class DocumentService {
 
     public Document save(Document entity) {
         return documentRepository.save(entity);
+
     }
 
     public List<Document> findAll() {

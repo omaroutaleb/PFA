@@ -29,11 +29,14 @@ public class AIService {
 
         UserMessage userMessage = UserMessage.builder()
                 .text("""
-                  You are an IDP assistant.
-                  - If input is a PDF, read all pages.
-                  - If input is an image, do OCR first.
-                  Return ONLY a concise JSON with detected doc type and key fields (dates, totals, names, ids, addresses).
-                  """)
+                        You are an Intelligent Document Processing (IDP) assistant. Extract key information from uploaded documents and return results as JSON only.
+                                                PROCESS:
+                                                1. PDF: Read all pages
+                                                2. Image: Perform OCR first
+                                                3. Extract: Document type, dates, amounts, names, IDs, addresses, and other key fields
+                                                4. Output: Clean JSON with "doctype" field and extracted data
+          
+                                                Return only the JSON response, no explanations.""")
                 .media(List.of(new Media(type, file)))
                 .build();
 
@@ -46,17 +49,6 @@ public class AIService {
         String json;
         json = resp.getResult().getOutput().getText();
         json = stripCodeFences(json);
-
-//        String docType = null;
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            JsonNode node = mapper.readTree(json);
-//            if (node.path("doc_type").isTextual()) {
-//                docType = node.get("doc_type").asText();
-//            }
-//            json = mapper.writeValueAsString(node);
-//        } catch (Exception ignored) {
-//        }
 
            System.out.println(json);
 
@@ -83,8 +75,8 @@ public class AIService {
         try {
             com.fasterxml.jackson.databind.ObjectMapper om = new com.fasterxml.jackson.databind.ObjectMapper();
             com.fasterxml.jackson.databind.JsonNode r = om.readTree(json);
-            com.fasterxml.jackson.databind.JsonNode n = r.at("/doc_type");
-            if (!n.isTextual()) n = r.at("/key_fields/doc_type");
+            com.fasterxml.jackson.databind.JsonNode n = r.at("/doctype");
+            if (!n.isTextual()) n = r.at("/key_fields/doctype");
             return n.isTextual() ? n.asText() : null;
         } catch (Exception e) {
             return null;

@@ -1,5 +1,6 @@
 package com.example.SmartDoc.application.controller;
 
+import com.example.SmartDoc.adapter.DocumentMapper;
 import com.example.SmartDoc.adapter.StorageException;
 import com.example.SmartDoc.application.DTO.DocumentDTO;
 import com.example.SmartDoc.model.Document;
@@ -21,20 +22,15 @@ public class UploadController {
     private AIService aiService;
 
     private DocumentService documentService;
+    private DocumentMapper docmapper;
 
-    public UploadController(FileStorageService fileStorageService, AIService aiService, DocumentService documentService) {
+    public UploadController(FileStorageService fileStorageService, AIService aiService, DocumentService documentService, DocumentMapper docmapper) {
         this.fileStorageService = fileStorageService;
         this.aiService = aiService;
         this.documentService = documentService;
+        this.docmapper = docmapper;
     }
 
-//    @PostMapping("/upload")
-//    public void fileStorage(MultipartFile file) throws StorageException {
-//
-//        fileStorageService.store(file);
-//        Document doc = aiService.extractFields(file.getResource());
-//        documentService.save(doc);
-//    }
 @PostMapping(
         value = "/upload",
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -53,18 +49,8 @@ public DocumentDTO fileStorage(@RequestPart("file") MultipartFile file) throws S
 
     // Persist and return DTO
     doc = documentService.save(doc);
-    return toDto(doc);
+    return docmapper.toDTO(doc);
 }
 
-    private DocumentDTO toDto(Document d) {
-        DocumentDTO dto = new DocumentDTO();
-        dto.setId(d.getId());
-        dto.setFileName(d.getFileName());
-        dto.setDocType(d.getDocType());
-        dto.setCreatedAt(d.getCreatedAt());
-        dto.setStatus(d.getStatus());
-        dto.setExtractedDataJson(d.getExtractedDataJson());
-        return dto;
-    }
 
 }

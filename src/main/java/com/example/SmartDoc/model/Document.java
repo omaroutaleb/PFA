@@ -1,18 +1,13 @@
 package com.example.SmartDoc.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder(toBuilder = true)
 @Data
 public class Document {
 
@@ -26,6 +21,8 @@ public class Document {
     private String status;
     @Column(name = "extracted_data_json",columnDefinition = "TEXT")
     private String extractedDataJson;
+
+    protected Document() {}
 
     public Document(String fileName, String docType, LocalDateTime createdAt,String status, String extractedDataJson) {
         this.fileName = fileName;

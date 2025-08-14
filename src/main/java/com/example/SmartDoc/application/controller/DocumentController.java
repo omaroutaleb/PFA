@@ -1,11 +1,9 @@
 package com.example.SmartDoc.application.controller;
 
 import com.example.SmartDoc.adapter.DocumentMapper;
-import com.example.SmartDoc.adapter.DocumentRepository;
 import com.example.SmartDoc.application.DTO.DocumentDTO;
 import com.example.SmartDoc.model.Document;
 import com.example.SmartDoc.service.DocumentService;
-import jakarta.persistence.PostUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:8081/")
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 
 public class DocumentController {
@@ -46,16 +44,6 @@ public class DocumentController {
         }
         return documentDTOS;
     }
-//    @GetMapping("/documents")
-//    public List<DocumentDTO> getAll() {
-//        List<Document> docs = documentService.findAll();
-//        for (Document doc : docs) {
-//            documentDTOS.add(documentMapper.toDTO(doc));
-//        }
-//        return documentDTOS;
-//    }
-
-
 
 
     @PutMapping("/docs/{id}")

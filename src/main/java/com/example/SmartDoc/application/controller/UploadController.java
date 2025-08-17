@@ -42,7 +42,7 @@ public DocumentDTO fileStorage(@RequestPart("file") MultipartFile file) throws S
                 org.springframework.http.HttpStatus.BAD_REQUEST, "file is required");
     }
 
-    fileStorageService.store(file);
+    //fileStorageService.store(file);
 
     // Assuming your AI service returns a Document entity (as in your snippet)
     Document doc = aiService.extractFields(file.getResource());

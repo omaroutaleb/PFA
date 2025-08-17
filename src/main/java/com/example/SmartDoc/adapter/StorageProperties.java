@@ -10,7 +10,7 @@ public class StorageProperties {
     /**
      * Folder location for storing files
      */
-    private String location = "upload-dirr";
+    private String location = "C:\\Users\\DELL\\SmartDoc\\upload-dirr";
 
     public String getLocation() {
         return location;
